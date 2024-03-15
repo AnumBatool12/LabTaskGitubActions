@@ -100,4 +100,11 @@ app.get('/todos/:priority', (req, res) =>{
 
 app.listen(3001, () => {
     console.log("App listens at port 3001")
+    console.log("App will shut down in 10 seconds")
 })
+
+setTimeout(() => {
+    server.close(() => {
+        console.log('Server shut down after timeout');
+    });
+}, 10000)
