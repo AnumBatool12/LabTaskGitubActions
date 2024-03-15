@@ -12,7 +12,8 @@ let todoList = [
         "Due_Date":"till 8:00",
         "Category": "Personal",
         "Status":"Completed",
-        "Priority":"Medium"
+        "Priority":"Medium",
+        "User": "Ben"
     }
 ]
 
@@ -39,11 +40,16 @@ app.post('/todos', (req, res) =>{
 app.patch('/todo/:id', (req, res) => {
     let todoid = req.params.id;
     let status = req.body.status;
+    let user = req.body.user;
 
     const index = todoList.findIndex( todo => todo.id == todoid);
 
     if (index === -1) {
         return res.status(404).json({message: "Todo item not found"});
+    }
+
+    if (todoList[index].User !== user){//authentication
+        return res.status(500).json({message:"You are not authenticated to change status"})
     }
 
     todoList[index].Status = status;
@@ -52,19 +58,25 @@ app.patch('/todo/:id', (req, res) => {
 
 })
 
-//get all tasks
+//get all tasks for a particular user
 app.get('/todos',(req, res) =>{
+    let user = req.body.user;
+
+    let userTodos = todoList.filter( todo => todo.User == user)
+
     res.status(200).json({
         message:"getting all todos",
-        todoList
+        userTodos
     });
 })
 
 //view task based on completion status
 app.get('/todos/:status', (req, res) =>{
     const todoStatus = req.params.status;
+    let user = req.body.user;
 
     let list = todoList.filter(todo => todo.Status == todoStatus)
+    list = list.filter(todo => todo.User == user);
 
     res.status(200).json({
         message:"getting todos with particular status",
@@ -75,8 +87,10 @@ app.get('/todos/:status', (req, res) =>{
 //view task based on priority
 app.get('/todos/:priority', (req, res) =>{
     const todoPriority = req.params.priority;
+    let user = req.body.user;
 
-    let list = todoList.filter(todo => todo.Priority == todoPriority)
+    let list = todoList.filter(todo => todo.Priority == todoPriority);
+    list = list.filter(todo => todo.User == user);
 
     res.status(200).json({
         message:"getting todos with particular Prioirty",
