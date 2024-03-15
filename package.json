@@ -1,0 +1,14 @@
+{
+  "name": "labtaskgitubactions",
+  "version": "1.0.0",
+  "description": "i211186 Lab 7",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anum Batool i211186",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3"
+  }
+}
